@@ -134,6 +134,7 @@ ENV_NAME = "CartPole-v0"
 EPISODE = 10000 # episode limitation
 STEP = 300 # step limitation in an episode
 TEST = 10
+result_file = "/tmp/cartpole-experiment-1"
 
 def main():
     # init openAI gym env and dqn agent
@@ -169,7 +170,7 @@ def main():
             print "episode: %d, Evaluation Average Reward: %f" % (episode, ave_reward)
             if ave_reward >= 200:
                 break
-    env.monitor.start("/document/", force=True)
+    env.monitor.start(result_file, force=True)
     for i in xrange(100):
         state = env.reset()
         for j in xrange(200):
