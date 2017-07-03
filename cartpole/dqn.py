@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 import random
 from collections import deque
+from gym import wrappers
 
 # Hyper parameters for DQN
 GAMMA = 0.9 # discount facter
@@ -41,16 +42,16 @@ class DQN():
         create a Q-learning network
         """
         # network weights 
-        w1 = self.weight_variable([self.state_dim, 20])
+        W1 = self.weight_variable([self.state_dim, 20])
         b1 = self.bias_variable([20])
-        w2 = self.weight_variable([20, self.action_dim])
+        W2 = self.weight_variable([20, self.action_dim])
         b2 = self.bias_variable([self.action_dim])
         
         # input layer
         # we use the format [None, state_dim] cuz minibatch
         self.state_input = tf.placeholder("float", [None, self.state_dim])
         # hidden layers
-        h.layer = tf.nn.relu(tf.matmul(self.state_input, W1) + b1)
+        h_layer = tf.nn.relu(tf.matmul(self.state_input, W1) + b1)
         # Q value layer
         self.Q_value = tf.matmul(h_layer, W2) + b2
     
@@ -69,8 +70,8 @@ class DQN():
         self.action_input = tf.placeholder("float", [None, self.action_dim]) # one hot
         self.y_input = tf.placeholder("float", [None]) # target Q value
         # reduce sum: compress data to 1-d
-        Q_action = tf.reduce_sum(tf.mul(self.Q_value, self.action_input), reduction_indices=1)
-        self.cost = self.reduce_mean(tf.square(self.y_input - Q_action))
+        Q_action = tf.reduce_sum(tf.multiply(self.Q_value, self.action_input), reduction_indices=1)
+        self.cost = tf.reduce_mean(tf.square(self.y_input - Q_action))
         self.optimizer = tf.train.AdamOptimizer(0.0001).minimize(self.cost)
     
     def perceive(self, state, action, reward, next_state, done):
@@ -134,14 +135,15 @@ ENV_NAME = "CartPole-v0"
 EPISODE = 10000 # episode limitation
 STEP = 300 # step limitation in an episode
 TEST = 10
-result_file = "/tmp/cartpole-experiment-1"
+result_file = "cartpole-experiment-3"
 
 def main():
     # init openAI gym env and dqn agent
     env = gym.make(ENV_NAME)
     agent = DQN(env)
-
+    print "DQN agent created"
     for episode in xrange(EPISODE):
+        print "episode: ", episode
         # init task
         state = env.reset()
         # Training
@@ -170,7 +172,7 @@ def main():
             print "episode: %d, Evaluation Average Reward: %f" % (episode, ave_reward)
             if ave_reward >= 200:
                 break
-    env.monitor.start(result_file, force=True)
+    env = wrappers.Monitor(env, result_file)
     for i in xrange(100):
         state = env.reset()
         for j in xrange(200):
@@ -180,7 +182,6 @@ def main():
             total_reward += reward
             if done:
                 break
-    env.monitor.close()
 
 if __name__ == "__main__":
     main()
