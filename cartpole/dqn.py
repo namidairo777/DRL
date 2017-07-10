@@ -35,7 +35,7 @@ class DQN():
         
         # init session
         self.session = tf.InteractiveSession()
-        self.session.run(tf.initialize_all_variables())
+        self.session.run(tf.global_variables_initializer())
 
     def create_Q_network(self):
         """
@@ -110,7 +110,7 @@ class DQN():
                 y_batch.append(reward_batch[i] + GAMMA * np.max(Q_value_batch[i]))
 
         self.optimizer.run(feed_dict={
-            self.y_input: batch,
+            self.y_input: y_batch,
             self.action_input: action_batch,
             self.state_input: state_batch       
         })        
@@ -143,13 +143,13 @@ def main():
     agent = DQN(env)
     print "DQN agent created"
     for episode in xrange(EPISODE):
-        print "episode: ", episode
+        
         # init task
         state = env.reset()
         # Training
         for step in xrange(STEP):
             action = agent.egreedy_action(state) # e-greedy action for train
-            next_agent, reward, done, _ = env.step(action)
+            next_state, reward, done, _ = env.step(action)
             # Define reward for agent
             reward_agent = -1 if done else 0.1
             agent.perceive(state, action, reward, next_state, done)
