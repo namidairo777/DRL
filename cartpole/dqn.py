@@ -135,7 +135,7 @@ ENV_NAME = "CartPole-v0"
 EPISODE = 10000 # episode limitation
 STEP = 300 # step limitation in an episode
 TEST = 10
-result_file = "cartpole-experiment-3"
+result_file = "cartpole-experiment-6"
 
 def main():
     # init openAI gym env and dqn agent
