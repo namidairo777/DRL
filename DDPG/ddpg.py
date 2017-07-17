@@ -198,18 +198,20 @@ def main(_):
 
         if GYM_MONITOR_EN:
             if not RENDER_ENV:
-                env.monitor.start(MONITOR_DIR, video_callable=False, force=True)
+                env = wrappers.Monitor(MONITOR_DIR, video_callable=False, force=True)
             else:
-                env.monitor.start(MONITOR_DIR, force=True)
+                env = wrappers.Monitor(MONITOR_DIR, force=True)
 
         try:
             train(sess, env, actor, critic, noise, reward, discrete)
         except KeyboardInterrupt:
             pass
 
-        if GYM_MONITOR_EN:
-            env.monitor.close()
+        #if GYM_MONITOR_EN:
+            #env.monitor.close()
+        env.close()
 
+    gym.upload(MONITOR_DIR, api_key="sk_JObiOSHpRjw48FpWvI1GA")
 
 if __name__ == '__main__':
     tf.app.run()
