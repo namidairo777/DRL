@@ -132,21 +132,24 @@ class DQN():
 # -----------------------------------------
 # Hyper Parameters
 ENV_NAME = "CartPole-v0"
-EPISODE = 10000 # episode limitation
-STEP = 300 # step limitation in an episode
+EPISODE = 3000 # episode limitation
+STEP = 3000 # step limitation in an episode
 TEST = 10
-result_file = "cartpole-experiment-6"
+result_file = "cartpole-experiment-3"
+UPLOAD = True
 
 def main():
     # init openAI gym env and dqn agent
     env = gym.make(ENV_NAME)
     agent = DQN(env)
-    print "DQN agent created"
+    
+    env = wrappers.Monitor(env, result_file, force=True)
     for episode in xrange(EPISODE):
         
         # init task
-        state = env.reset()
+        # state = env.reset()
         # Training
+        total_reward = 0.0
         for step in xrange(STEP):
             action = agent.egreedy_action(state) # e-greedy action for train
             next_state, reward, done, _ = env.step(action)
@@ -154,25 +157,17 @@ def main():
             reward_agent = -1 if done else 0.1
             agent.perceive(state, action, reward, next_state, done)
             state = next_state
+            total_reward += reward
             if done:
                 break
         # test every 100 episode
-        if episode % 100 == 0:            
-            total_reward = 0
-            for i in xrange(TEST):
-                state = env.reset()
-                for j in xrange(STEP):
-                    # env.render()
-                    action = agent.action(state) # direct action for test
-                    state, reward, done, _ = env.step(action)
-                    total_reward += reward
-                    if done:
-                        break
-            ave_reward = total_reward / TEST
-            print "episode: %d, Evaluation Average Reward: %f" % (episode, ave_reward)
-            if ave_reward >= 200:
-                break
-    env = wrappers.Monitor(env, result_file)
+        if episode % 100 == 0: 
+            print "episode: %d, Evaluation Average Reward: %f" % (episode, total_reward)
+
+    if UPLOAD:
+        gym.upload(result_file, api_key="sk_JObiOSHpRjw48FpWvI1GA")
+    
+    """
     for i in xrange(100):
         state = env.reset()
         for j in xrange(200):
@@ -182,7 +177,7 @@ def main():
             total_reward += reward
             if done:
                 break
-
+    """
 if __name__ == "__main__":
     main()
     
