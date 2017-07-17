@@ -147,7 +147,7 @@ def main():
     for episode in xrange(EPISODE):
         
         # init task
-        # state = env.reset()
+        state = env.reset()
         # Training
         total_reward = 0.0
         for step in xrange(STEP):
