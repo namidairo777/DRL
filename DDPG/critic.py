@@ -44,10 +44,10 @@ class CriticNetwork(object):
         self.target_network_params = tf.trainable_variables()[(len(self.network_params) + num_actor_vars):]
         
         # Op for periodically updating target network with online network weights with regularization
-        self.update_network_network_params = \
+        self.update_target_network_params = \
             [self.target_network_params[i].assign(tf.multiply(self.network_params[i], self.tau) + \
-                                     tf.multiply(self.target_network_params[i], 1. - slef.tau))\
-              fori in range(len(self.target_network_params))]
+                                     tf.multiply(self.target_network_params[i], 1. - self.tau))\
+              for i in range(len(self.target_network_params))]
         
         # network target (y_i)
         self.predicted_q_value = tf.placeholder(tf.float32, [None, 1])
@@ -59,12 +59,12 @@ class CriticNetwork(object):
         # get the gradient of the net w.r.t. the action
         self.action_grads = tf.gradients(self.out, self.action)
 
-    def create_actor_network(self):
+    def create_critic_network(self):
         inputs = tf.placeholder(tf.float32, [None, self.s_dim])
-        action = tf.placeholder(tf.float32, [None, self.s_dim])
+        action = tf.placeholder(tf.float32, [None, self.a_dim])
         
         # Input -> Hidden Layer
-        w1 = weight_variable([self.s_dim, n_hidden_1]
+        w1 = weight_variable([self.s_dim, n_hidden_1])
         b1 = bias_variable([n_hidden_1])
 
         # Hidden Layer -> Hidden Layer + Action
@@ -73,8 +73,8 @@ class CriticNetwork(object):
         b2 = bias_variable([n_hidden_2])
         
         # Hidden Layer -> Output Q-value
-        w3 = weight_variable([n_hidden_2, 1]
-        b3 = bias_bariable([1])
+        w3 = weight_variable([n_hidden_2, 1])
+        b3 = bias_variable([1])
 
         
         # 1st hidden layer, option: Softmax, ReLU, tanh or sigmoid
@@ -89,7 +89,7 @@ class CriticNetwork(object):
         return inputs, action, out
 
     def train(self, inputs, action, predicted_q_value):
-        self.sess.run([self.out, self.optimize], feed_dict={
+        return self.sess.run([self.out, self.optimize], feed_dict={
             self.inputs: inputs,
             self.action: action,
             self.predicted_q_value: predicted_q_value

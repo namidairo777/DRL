@@ -16,11 +16,11 @@ from noise import Noise
 from reward import Reward
 from actor import ActorNetwork
 from critic import CriticNetwork
-
+from gym import wrappers
 # -------------------
 # Training Parameters
 # -------------------
-MAX_EPISODES = 1000
+MAX_EPISODES = 500
 MAX_EP_STEPS = 1000
 NOISE_MAX_EP = 200
 # Noise parameters - Ornstein Uhlenbeck
@@ -43,7 +43,7 @@ TAU = 0.001
 # Unility Parameters
 # -------------------
 RENDER_ENV = False
-GYM_MONITOR_EN = False
+GYM_MONITOR_EN = True
 ENV_NAME = "CartPole-v0"
 MONITOR_DIR = "./results/" + ENV_NAME
 SUMMARY_DIR = "./results/ddpg"
@@ -154,14 +154,15 @@ def train(sess, env, actor, critic, noise, reward, discrete):
                 for step in episode_buffer:
                     replay_buffer.add(np.reshape(step[0], (actor.s_dim,)), np.reshape(step[1], (actor.a_dim,)), step[2], step[3], np.reshape(step[4], (actor.s_dim,)))
                 
-                summary = tf.summary()
-                summary.value.add(tag="Perf/Reward", simple_value=float(ep_reward))
-                summary.value.add(tag="Perf/Qmax", simple_value=float(ep_ave_max_q / float(j)))
-                summary_writer.add_summary(summary, i)
+                # summary = tf.summary()
+                # summary.value.add(tag="Perf/Reward", simple_value=float(ep_reward))
+                # summary.value.add(tag="Perf/Qmax", simple_value=float(ep_ave_max_q / float(j)))
+                # summary_writer.add_summary(summary, i)
 
-                summary_writer.flush()
+                # summary_writer.flush()
                 
-                print "|Reward: %.2i | Episode: %d | Qmax: %.4f" (int(ep_reward), i, (ep_ave_max_q / float(i)))
+                if i != 0: 
+                    print "|Reward: %.2i | Episode: %d | Qmax: %.4f" % (int(ep_reward), i, (ep_ave_max_q / float(i)))
                 break
 
 
@@ -198,9 +199,9 @@ def main(_):
 
         if GYM_MONITOR_EN:
             if not RENDER_ENV:
-                env = wrappers.Monitor(MONITOR_DIR, video_callable=False, force=True)
+                env = wrappers.Monitor(env, MONITOR_DIR, force=True)
             else:
-                env = wrappers.Monitor(MONITOR_DIR, force=True)
+                env = wrappers.Monitor(env, MONITOR_DIR, force=True)
 
         try:
             train(sess, env, actor, critic, noise, reward, discrete)

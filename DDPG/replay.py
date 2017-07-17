@@ -24,7 +24,7 @@ class ReplayBuffer(object):
             self.count += 1
         else:
             self.buffer.popleft()
-            self.append(experience)
+            self.buffer.append(experience)
 
     def size(self):
         return self.count 

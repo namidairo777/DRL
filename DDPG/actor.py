@@ -26,7 +26,7 @@ class ActorNetwork(object):
     Output layer activation is a tanh to keep action between -2 and 2        
     """
     
-    def __init__(self, sess, state_dim, action_dim, acction_bound, learning_rate, tau):
+    def __init__(self, sess, state_dim, action_dim, action_bound, learning_rate, tau):
         self.sess = sess
         self.s_dim = state_dim
         self.a_dim = action_dim
@@ -45,19 +45,19 @@ class ActorNetwork(object):
         self.target_network_params = tf.trainable_variables()[len(self.network_params):]
         
         # Op for periodically updating target network with online network weights
-        self.update_network_network_params = \
+        self.update_target_network_params = \
             [self.target_network_params[i].assign(tf.multiply(self.network_params[i], self.tau) + \
-                                     tf.multiply(self.target_network_params[i], 1. - slef.tau))\
-              fori in range(len(self.target_network_params))]
+                                     tf.multiply(self.target_network_params[i], 1. - self.tau))\
+              for i in range(len(self.target_network_params))]
 
         # this gradients will be provided by the critic netowrk
         self.action_gradient = tf.placeholder(tf.float32, [None, self.a_dim])
 
         # Combine the gradients 
-        self.action_gradients = ttf.gradients(self.scaled_out, self.network_params, -self.action_gradient)
+        self.action_gradients = tf.gradients(self.scaled_out, self.network_params, -self.action_gradient)
         
         # Optimization Op by applying gradient, variable pairs
-        self.optimize = tf.train.AdamOptimizer(self.learning_rate).apply_gradients(zip(self.actor_gradients, self.network_params))
+        self.optimize = tf.train.AdamOptimizer(self.learning_rate).apply_gradients(zip(self.action_gradients, self.network_params))
         
         self.num_trainable_vars = len(self.network_params) + len(self.target_network_params)
 
@@ -65,7 +65,7 @@ class ActorNetwork(object):
         inputs = tf.placeholder(tf.float32, [None, self.s_dim])
         
         # Input -> Hidden Layer
-        w1 = weight_variable([self.s_dim, n_hidden_1]
+        w1 = weight_variable([self.s_dim, n_hidden_1])
         b1 = bias_variable([n_hidden_1])
 
         # Hidden Layer -> Hidden Layer
@@ -73,8 +73,8 @@ class ActorNetwork(object):
         b2 = bias_variable([n_hidden_2])
         
         # Hidden Layer -> Output
-        w3 = weight_variable([n_hidden_2, self.a_dim]
-        b3 = bias_bariable([self.a_dim])
+        w3 = weight_variable([n_hidden_2, self.a_dim])
+        b3 = bias_variable([self.a_dim])
         
         # 1st hidden layer, option: Softmax, ReLU, tanh or sigmoid
         h1 = tf.nn.relu(tf.matmul(inputs, w1) + b1)
@@ -86,7 +86,7 @@ class ActorNetwork(object):
         out = tf.nn.tanh(tf.matmul(h2, w3) + b3)
 
         # Scale output to -action_bound to action_bound
-        scaled_out = tf.muultiply(out, self.action_bound)
+        scaled_out = tf.multiply(out, self.action_bound)
 
         return inputs, out, scaled_out
 
