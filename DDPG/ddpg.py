@@ -20,7 +20,7 @@ from gym import wrappers
 # -------------------
 # Training Parameters
 # -------------------
-MAX_EPISODES = 500
+MAX_EPISODES = 1000
 MAX_EP_STEPS = 1000
 NOISE_MAX_EP = 200
 # Noise parameters - Ornstein Uhlenbeck
@@ -44,7 +44,7 @@ TAU = 0.001
 # -------------------
 RENDER_ENV = False
 GYM_MONITOR_EN = True
-ENV_NAME = "CartPole-v0"
+ENV_NAME = "Pendulum-v0"
 MONITOR_DIR = "./results/" + ENV_NAME
 SUMMARY_DIR = "./results/ddpg"
 RANDOM_SEED = 1234
