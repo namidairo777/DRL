@@ -30,3 +30,57 @@ DPG maintains a parameterized actor function.. which specifies the current polic
 - We create a copy of the actor and critic networks, Q and u respectively, that are used to calculating the target values. The weights of these target networks are then updated by having them slowly track the learned networks. This means that thae target values are constrained to change slowly, greatly improving the stability of learning.
 Deep DPG can learn competitive policies for all of our tasks using low-dimensional observations using the same hyper-parameters and network structure.
 - It requires only straightforward actor-critic architecture and learning algorithm with very few "moving parts"
+
+## Implementation
+### ActorNetwork
+```python
+inputs = tf.placeholder(tf.float32, [None, self.s_dim])
+        
+# Input -> Hidden Layer
+w1 = weight_variable([self.s_dim, n_hidden_1])
+b1 = bias_variable([n_hidden_1])
+# Hidden Layer -> Hidden Layer
+w2 = weight_variable([n_hidden_1, n_hidden_2])
+b2 = bias_variable([n_hidden_2])
+
+# Hidden Layer -> Output
+w3 = weight_variable([n_hidden_2, self.a_dim])
+b3 = bias_variable([self.a_dim])
+
+# 1st hidden layer, option: Softmax, ReLU, tanh or sigmoid
+h1 = tf.nn.relu(tf.matmul(inputs, w1) + b1)
+ 
+# 2nd hidden layer, option: Softmax, ReLU, tanh or sigmoid
+h2 = tf.nn.relu(tf.matmul(h1, w2) + b2)
+
+# Run tanh on output to get -1 to 1
+out = tf.nn.tanh(tf.matmul(h2, w3) + b3)
+# Scale output to -action_bound to action_bound
+scaled_out = tf.multiply(out, self.action_bound)
+```
+### CriticNetwork
+```python
+inputs = tf.placeholder(tf.float32, [None, self.s_dim])
+action = tf.placeholder(tf.float32, [None, self.a_dim])
+
+# Input -> Hidden Layer
+w1 = weight_variable([self.s_dim, n_hidden_1])
+b1 = bias_variable([n_hidden_1])
+# Hidden Layer -> Hidden Layer + Action
+w2 = weight_variable([n_hidden_1, n_hidden_2])
+w2a = weight_variable([self.a_dim, n_hidden_2])
+b2 = bias_variable([n_hidden_2])
+
+# Hidden Layer -> Output Q-value
+w3 = weight_variable([n_hidden_2, 1])
+b3 = bias_variable([1])
+
+# 1st hidden layer, option: Softmax, ReLU, tanh or sigmoid
+h1 = tf.nn.relu(tf.matmul(inputs, w1) + b1)
+ 
+# 2nd hidden layer, option: Softmax, ReLU, tanh or sigmoid
+# Action inserted here.
+h2 = tf.nn.relu(tf.matmul(h1, w2) + tf.matmul(action, w2a) + b2)
+
+out = tf.matmul(h2, w3) + b3
+```
