@@ -182,7 +182,7 @@ def main(_):
             action_dim = env.action_space.shape[0]
             action_bound = env.action_space.high
             # Ensure action bound is symmetric
-            assert(env.action_space.hig == -env.action_space.low)
+            assert(env.action_space.high == -env.action_space.low)
             discrete = False
             print "Continuous Action Space"
         except AttributeError:
