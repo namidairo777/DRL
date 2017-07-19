@@ -13,7 +13,7 @@ from gym import wrappers
 GAMMA = 0.9 # discount facter
 INITIAL_EPSILON = 0.5 # starting value of epsilon
 FINAL_EPSILON = 0.01 # final value
-REPLAY_SIZE = 10000 # experience replay buffer size
+REPLAY_SIZE = 100000 # experience replay buffer size
 BATCH_SIZE = 32 # minibatch size
 
 # DQN class
@@ -132,10 +132,10 @@ class DQN():
 # -----------------------------------------
 # Hyper Parameters
 ENV_NAME = "CartPole-v0"
-EPISODE = 3000 # episode limitation
+EPISODE = 5000 # episode limitation
 STEP = 3000 # step limitation in an episode
 TEST = 10
-result_file = "cartpole-experiment-3"
+result_file = "cartpole-experiment-1"
 UPLOAD = True
 
 def main():
@@ -159,11 +159,13 @@ def main():
             state = next_state
             total_reward += reward
             if done:
+                if episode % 50 == 0:
+                    print "episode: %d, reward:%f" % (episode, total_reward)
                 break
         # test every 100 episode
-        if episode % 100 == 0: 
-            print "episode: %d, Evaluation Average Reward: %f" % (episode, total_reward)
-
+        # if episode % 100 == 0: 
+            # print "episode: %d, Evaluation Average Reward: %f" % (episode, total_reward)
+    env.close()
     if UPLOAD:
         gym.upload(result_file, api_key="sk_JObiOSHpRjw48FpWvI1GA")
     
