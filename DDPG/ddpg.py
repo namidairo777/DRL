@@ -53,6 +53,7 @@ MINIBATCH_SIZE = 100
 
 # -----------------------
 # Tensorflow Summary Ops
+# Need to fix
 # -----------------------
 def build_summaries():
     episode_reward = tf.Variable(0.)
