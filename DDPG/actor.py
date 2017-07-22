@@ -111,22 +111,4 @@ class ActorNetwork(object):
         
     def get_num_trainable_vars(self):
         return self.num_trainable_vars
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
+        
