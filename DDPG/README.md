@@ -32,6 +32,37 @@ Deep DPG can learn competitive policies for all of our tasks using low-dimension
 - It requires only straightforward actor-critic architecture and learning algorithm with very few "moving parts"
 
 ## Implementation
+### Hyperparameters
+```python
+# -------------------
+# Training Parameters
+# -------------------
+MAX_EPISODES = 1000
+MAX_EP_STEPS = 1000
+NOISE_MAX_EP = 200
+# Noise parameters - Ornstein Uhlenbeck
+DELTA = 0.5
+SIGMA = 0.5
+OU_A = 3.
+OU_MU = 0.
+# Reward parameters
+REWARD_FACTOR = 0.1
+# Base learning rate for the actor network
+ACTOR_LEARNING_RATE = 0.0001
+# Base learning rate for the Critic network
+CRITIC_LEARNING_RATE = 0.001
+# Discount Factor
+GAMMA = 0.99
+# soft target update param
+TAU = 0.001
+
+# -------------------
+# Unility Parameters
+# -------------------
+RANDOM_SEED = 1234
+BUFFER_SIZE = 100000
+MINIBATCH_SIZE = 100
+```
 ### ActorNetwork
 ```python
 inputs = tf.placeholder(tf.float32, [None, self.s_dim])
