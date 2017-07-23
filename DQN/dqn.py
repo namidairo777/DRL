@@ -13,7 +13,7 @@ from gym import wrappers
 GAMMA = 0.9 # discount facter
 INITIAL_EPSILON = 0.5 # starting value of epsilon
 FINAL_EPSILON = 0.01 # final value
-REPLAY_SIZE = 100000 # experience replay buffer size
+REPLAY_SIZE = 10000 # experience replay buffer size
 BATCH_SIZE = 32 # minibatch size
 
 # DQN class
