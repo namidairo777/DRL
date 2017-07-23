@@ -142,26 +142,53 @@ def main():
     # init openAI gym env and dqn agent
     env = gym.make(ENV_NAME)
     agent = DQN(env)
-    
+    train = True
     env = wrappers.Monitor(env, result_file, force=True)
     for episode in xrange(EPISODE):
         
         # init task
         state = env.reset()
         # Training
-        total_reward = 0.0
-        for step in xrange(STEP):
-            action = agent.egreedy_action(state) # e-greedy action for train
-            next_state, reward, done, _ = env.step(action)
-            # Define reward for agent
-            reward_agent = -1 if done else 0.1
-            agent.perceive(state, action, reward, next_state, done)
-            state = next_state
-            total_reward += reward
-            if done:
-                if episode % 50 == 0:
-                    print "episode: %d, reward:%f" % (episode, total_reward)
-                break
+        
+        if train:    
+            total_reward = 0.0
+            for step in xrange(STEP):
+                action = agent.egreedy_action(state) # e-greedy action for train
+                next_state, reward, done, _ = env.step(action)
+                # Define reward for agent
+                reward_agent = -1 if done else 0.1
+                agent.perceive(state, action, reward, next_state, done)
+                state = next_state
+                total_reward += reward
+                if done:
+                    if episode % 50 == 0:
+                        print "episode: %d, train reward:%f" % (episode, total_reward)
+                    break
+            if episode % 100 == 0:
+                total_reward = 0
+                for i in xrange(TEST):
+                    state = env.reset()
+                    for j in xrange(STEP):
+                        # env.render()
+                        action = agent.action(state) # direct action for test
+                        state,reward,done,_ = env.step(action)
+                        total_reward += reward
+                        if done:
+                            break
+                ave_reward = total_reward/TEST
+                print 'episode: ',episode,'Evaluation Average Reward of 10:',ave_reward
+                if ave_reward >= 200:
+                    train = False
+                    break 
+        # test
+        else:
+            for j in xrange(200):
+                # env.render()
+                action = agent.action(state) # direct action for test
+                state,reward,done,_ = env.step(action)
+                total_reward += reward
+                if done:
+                    break
         # test every 100 episode
         # if episode % 100 == 0: 
             # print "episode: %d, Evaluation Average Reward: %f" % (episode, total_reward)
