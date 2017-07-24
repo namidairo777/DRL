@@ -35,7 +35,7 @@ ACTOR_LEARNING_RATE = 0.0001
 # Base learning rate for the Critic network
 CRITIC_LEARNING_RATE = 0.001
 # Discount Factor
-GAMMA = 0.99
+GAMMA = 0.9997
 # soft target update param
 TAU = 0.001
 
@@ -48,7 +48,7 @@ ENV_NAME = "Pendulum-v0"
 MONITOR_DIR = "./results/" + ENV_NAME
 SUMMARY_DIR = "./results/ddpg"
 RANDOM_SEED = 1234
-BUFFER_SIZE = 100000
+BUFFER_SIZE = 5000
 MINIBATCH_SIZE = 100
 
 # -----------------------
