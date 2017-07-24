@@ -118,11 +118,12 @@ class DQN():
     def egreedy_action(self, state):
         Q_value = self.Q_value.eval(feed_dict = {self.state_input:[state]})[0]
         if random.random() <= self.epsilon:
+            self.epilon -= (INITIAL_EPSILON - FINAL_EPSILON) / 10000
             return random.randint(0, self.action_dim - 1)
         else:
             return np.argmax(Q_value)
         
-        self.epilon -= (INITIAL_EPSILON - FINAL_EPSILON) / 10000
+        
 
 
     def action(self, state):  
@@ -133,7 +134,7 @@ class DQN():
 # Hyper Parameters
 ENV_NAME = "CartPole-v0"
 EPISODE = 5000 # episode limitation
-STEP = 3000 # step limitation in an episode
+STEP = 300 # step limitation in an episode
 TEST = 10
 result_file = "cartpole-experiment-1"
 UPLOAD = True
@@ -161,10 +162,10 @@ def main():
                 state = next_state
                 total_reward += reward
                 if done:
-                    if episode % 50 == 0:
+                    if episode % 100 == 0:
                         print "episode: %d, train reward:%f" % (episode, total_reward)
                     break
-            if episode % 100 == 0:
+            if episode % 200 == 0:
                 total_reward = 0
                 for i in xrange(TEST):
                     state = env.reset()
@@ -176,13 +177,13 @@ def main():
                         if done:
                             break
                 ave_reward = total_reward/TEST
-                print 'episode: ',episode,'Evaluation Average Reward of 10:',ave_reward
+                print 'episode: ', episode, 'Ave Reward of 10 tests:', ave_reward
                 if ave_reward >= 200:
                     train = False
                     break 
         # test
         else:
-            for j in xrange(200):
+            for j in xrange(STEP):
                 # env.render()
                 action = agent.action(state) # direct action for test
                 state,reward,done,_ = env.step(action)
