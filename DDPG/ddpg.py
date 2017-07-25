@@ -29,13 +29,13 @@ SIGMA = 0.5
 OU_A = 3.
 OU_MU = 0.
 # Reward parameters
-REWARD_FACTOR = 0.1
+REWARD_FACTOR = 0.01 # Discrete: Reward factor = 0.1
 # Base learning rate for the actor network
 ACTOR_LEARNING_RATE = 0.0001
 # Base learning rate for the Critic network
 CRITIC_LEARNING_RATE = 0.001
 # Discount Factor
-GAMMA = 0.9997
+GAMMA = 0.99
 # soft target update param
 TAU = 0.001
 
@@ -44,11 +44,12 @@ TAU = 0.001
 # -------------------
 RENDER_ENV = False
 GYM_MONITOR_EN = True
-ENV_NAME = "Pendulum-v0"
+# ENV_NAME = 'CartPole-v0' # Discrete: Reward factor = 0.1
+ENV_NAME = "Pendulum-v0" 
 MONITOR_DIR = "./results/" + ENV_NAME
 SUMMARY_DIR = "./results/ddpg"
 RANDOM_SEED = 1234
-BUFFER_SIZE = 5000
+BUFFER_SIZE = 100000
 MINIBATCH_SIZE = 100
 
 # -----------------------
