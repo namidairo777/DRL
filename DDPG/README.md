@@ -35,7 +35,7 @@ Deep DPG can learn competitive policies for all of our tasks using low-dimension
 ### Hyperparameters
 ```python
 # -------------------
-# Training Parameters
+# Training Parameters　For Pendulum-v0
 # -------------------
 MAX_EPISODES = 1000
 MAX_EP_STEPS = 1000
@@ -46,7 +46,7 @@ SIGMA = 0.5
 OU_A = 3.
 OU_MU = 0.
 # Reward parameters
-REWARD_FACTOR = 0.1
+REWARD_FACTOR = 0.01 # Discrete: Reward factor = 0.1
 # Base learning rate for the actor network
 ACTOR_LEARNING_RATE = 0.0001
 # Base learning rate for the Critic network
