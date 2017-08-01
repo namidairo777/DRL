@@ -20,16 +20,16 @@ In order to make use of former experience, they use input of this task as input 
 
 ## PathNet
 PathNet can be regarded as the generalization version of progressive NN.
-![progressive NN](imgs/pathnet.png)
+![progressive NN](imgs/pathnet.png) <br>
 Every layer of this network could be viewed as a block, so building a network is to build blocks and trying to reuse block.<br>
 At first, we have N candidate blocks in every layer. For every potential network, each layer could use K blocks. We random a few networks (Path) to train some episodes.<br>
 After training, we use genetic algorithm to eliminate bad paths and keep the good ones, and we mutate them, then continue to do training. <br>
 Finally, we get a good path. From box 1 - box 4<br>
 This is a independent algorithm for training a task. <br>
 <br>
-How to extend to continuous learning?<br>
+- How to extend to continuous learning?<br>
 After training first task, we keep the parameters of path to first task all fixed, then re-initialize all other blocks, train them like usual.<br>
-The only difference is the some blocks are fixed (red ones in graph).<br>
+**The only difference is the some blocks are fixed** (red ones in graph).<br>
 PathNet dont have the problems in Progressive NN.
 ### Abstract
 - Area: artificial general intelligence (AGI)
@@ -39,6 +39,4 @@ PathNet dont have the problems in Progressive NN.
 - Significant improvement on A3C (Asynchronous Advantage Actor-Critic)
 
 ## EWC
-
-
-![progressive NN](progressiveNN.png)
+to do list
