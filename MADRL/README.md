@@ -7,3 +7,10 @@ The goal of this task is similiar to my [previous multi-agent project](https://g
 	- Reward
 	- Env
 	- Observation
+
+## Related Research
+[Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/pdf/1706.02275.pdf)
+### Proposed method
+1. Multi-Agent Actor Critic
+
+![Chatting](https://github.com/namidairo777/mydiary/blob/master/git_img/chatting.png)
