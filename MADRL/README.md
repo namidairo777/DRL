@@ -12,5 +12,12 @@ The goal of this task is similiar to my [previous multi-agent project](https://g
 [Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/pdf/1706.02275.pdf)
 ### Proposed method
 1. Multi-Agent Actor Critic
+Constraints: 1) the learned policies can only use local information (their own observations) at execution time; 2) no differentiable model of env dynamics; 3) no any communication method between agents.<br>
+Expected gradient of expected return for agent i,
+![P4](https://github.com/namidairo777/DRL/blob/master/MADRL/imgs/P4.png)
+
+<hr>
+2. Inferring Policies of other Agents
+3. Agents with Policy Ensembles
 
 ![Chatting](https://github.com/namidairo777/mydiary/blob/master/git_img/chatting.png)
