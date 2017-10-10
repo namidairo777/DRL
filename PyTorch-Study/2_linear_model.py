@@ -12,7 +12,7 @@ def loss(x, y):
 	return (y_pred - y) * (y_pred - y)
 
 w_list = []
-mes_list = []
+mse_list = []
 
 for w in np.arange(0.0, 4.1, 0.1):
 	print("w=", w)
