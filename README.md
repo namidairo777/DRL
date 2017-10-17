@@ -18,6 +18,8 @@ Deep Reinforcement Learning
 [David Silver teaching videos in UK](http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html) <br>
 ### Great Projects
 [ConvNetJS](http://cs.stanford.edu/people/karpathy/convnetjs/index.html) <br>
+
 ## Platform
 OpenAI gym: http://gym.openai.com <br>
-OpenAI Universe https://blog.openai.com/universe/
+OpenAI Universe: https://blog.openai.com/universe/ <br>
+Multi-Agent particle env: https://github.com/openai/multiagent-particle-envs/
