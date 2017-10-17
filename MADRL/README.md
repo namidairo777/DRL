@@ -23,10 +23,9 @@ Expected gradient of expected return for agent i,
 ## Proposed Research
 - Based on MADDPG
 - Hyperparameter tuning
-	- [Proximal Policy Optimization](https://github.com/openai/multiagent-particle-envs)
+	- From [Proximal Policy Optimization](https://github.com/openai/multiagent-particle-envs)
 	- Use an adaptive KL penalty to control the change of the policy at each iteration.
-- Asynchronous Advantage Actor-Critic 
-	- Multiple workers
+- Multiple workers 
+	- Based on [Asynchronous Advantage Actor-Critic](https://arxiv.org/pdf/1602.01783.pdf)
 	- No need for experiment replay, in other word no need for target network
 	- Multi-threading programming
-![Chatting](https://github.com/namidairo777/mydiary/blob/master/git_img/chatting.png)
